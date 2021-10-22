@@ -6,7 +6,6 @@ import Sidebar from "../sidebar/Sidebar";
 import events from "../../gateway/events";
 import "./calendar.scss";
 
-
 const Calendar = ({weekDates}) => {
   const [event,setEvent]=useState(events)
   return (
