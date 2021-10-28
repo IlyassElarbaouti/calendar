@@ -15,12 +15,29 @@ const Event = ({id, height, marginTop, title, time ,deleteEventHandler}) => {
 
   return (
     <>
-      <div style={eventStyle} onClick={toggleDeleteBtnHandler} className="event">
+      <div
+        style={eventStyle}
+        onClick={toggleDeleteBtnHandler}
+        className="event"
+      >
         <div className="event__title">{title}</div>
         <div className="event__time">{time}</div>
         {showDeleteBtn && (
-          <button onClick={()=>deleteEventHandler(id)} className="button deleteBtn">
-            <i style={{margin:'0px 10px', color:'grey' ,zindex:100}} className="fa-trash fas"></i>Delete
+          <button
+            style={{
+              margin: "0px 10px",
+              position: "absolute",
+              bottom: -10,
+              right: -10,
+            }}
+            onClick={() => deleteEventHandler(id)}
+            className="button deleteBtn"
+          >
+            <i
+              style={{ margin: "0px 10px", color: "grey" }}
+              className="fa-trash fas"
+            ></i>
+            Delete
           </button>
         )}
       </div>

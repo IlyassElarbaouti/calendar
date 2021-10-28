@@ -1,3 +1,6 @@
+import moment from "moment";
+
+
 const baseUrl = 'https://6173dd16110a740017223181.mockapi.io/events';
 
 export const fetchEvents = () =>
@@ -37,7 +40,7 @@ export const createObjectForm = () => {
   return {
     title,
     description,
-    dateFrom: new Date(`${date} ${startTime}`),
-    dateTo: new Date(`${date} ${endTime}`),
+    dateFrom: moment(new Date(`${date} ${startTime}`)),
+    dateTo: moment(new Date(`${date} ${endTime}`)),
   };
 };

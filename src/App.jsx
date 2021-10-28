@@ -1,46 +1,40 @@
-import React, { useEffect , useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./components/header/Header.jsx";
 import Calendar from "./components/calendar/Calendar.jsx";
 import { getWeekStartDate, generateWeekRange } from "../src/utils/dateUtils.js";
-import Modal from './components/modal/Modal.jsx'
+import Modal from "./components/modal/Modal.jsx";
 import "./common.scss";
-import { fetchEvents,
+import {
+  fetchEvents,
   createNewEvent,
   deleteEvent,
-  createObjectForm, } from "./gateway/events.js";
+  createObjectForm,
+} from "./gateway/events.js";
 
 const App = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [weekStartDate, setWeekStartDate] = useState(new Date());
-    const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState([]);
   const weekDates = generateWeekRange(getWeekStartDate(weekStartDate));
-  
+
   const fetchEventsHandler = () => {
-    fetchEvents().then((data) => 
-      setEvents(data));
+    fetchEvents().then((data) => setEvents(data));
   };
   const deleteEventHandler = (id) => {
-      deleteEvent(id)
-      .then(() => fetchEventsHandler())
-      console.log(events)
+    deleteEvent(id).then(() => fetchEventsHandler());
+    console.log(events);
   };
 
-    useEffect(() => {
-      fetchEventsHandler();
-    }, []);
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      createNewEvent(createObjectForm()).then(() => fetchEventsHandler());
-      setModalOpen(!modalOpen);
-    };
-
-  const createHandler = () =>{
-    setModalOpen(true)
-  }
+  useEffect(() => {
+    fetchEventsHandler();
+  }, []);
+ 
+  const createHandler = () => {
+    setModalOpen(true);
+  };
   const closeHandler = () => {
-    setModalOpen(false)
+    setModalOpen(false);
   };
-   
 
   const prevWeekHandler = () => {
     setWeekStartDate(
@@ -58,7 +52,13 @@ const App = () => {
   const resetWeek = () => {
     setWeekStartDate(new Date());
   };
-            console.log(events);
+  console.log(events);
+  
+   const handleSubmit = (event) => {
+     event.preventDefault();
+     createNewEvent(createObjectForm()).then(() => fetchEventsHandler());
+     setModalOpen(!modalOpen);
+   };
   return (
     <>
       {modalOpen && (

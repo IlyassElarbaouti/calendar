@@ -25,7 +25,6 @@ const Calendar = ({ weekDates, events, deleteEventHandler }) => {
   );
 };
 
-
 // class Calendar extends Component {
 //   state = {
 //     events,
