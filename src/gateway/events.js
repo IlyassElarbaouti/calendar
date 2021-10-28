@@ -1,32 +1,43 @@
-const events = [
-  {
-    id: 1,
-    title: "Go to the gym",
-    description: "some text here",
-    dateFrom: new Date(2021, 9, 15, 10, 15),
-    dateTo: new Date(2021, 9, 15, 15, 0),
-  },
-  {
-    id: 2,
-    title: "Go to the school",
-    description: "hello, 2 am",
-    dateFrom: new Date(2021, 9, 16, 10, 15),
-    dateTo: new Date(2021, 9, 16, 11, 0),
-  },
-  {
-    id: 3,
-    title: "Lunch",
-    description: "",
-    dateFrom: new Date(2021, 9, 17, 10, 30),
-    dateTo: new Date(2021, 9, 17, 11, 30),
-  },
-  {
-    id: 4,
-    title: "Meet friend",
-    description: "at the cafe",
-    dateFrom: new Date(2021, 9, 25, 10, 30),
-    dateTo: new Date(2021, 9, 25, 11, 0),
-  },
-];
+const baseUrl = 'https://6173dd16110a740017223181.mockapi.io/events';
 
-export default events;
+export const fetchEvents = () =>
+  fetch(baseUrl).then(response => {
+    if (!response.ok) {
+      throw new Error("Internal Server Error. Can't display events");
+    }
+    return response.json();
+  });
+
+export const createNewEvent = event =>
+  fetch(baseUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(event),
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error("Internal Server Error. Can't create event");
+    }
+    return response.json();
+  });
+
+export const deleteEvent = eventId =>
+  fetch(`${baseUrl}/${eventId}`, {
+    method: 'DELETE',
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to delete task');
+    }
+  });
+
+export const createObjectForm = () => {
+  const form = document.querySelector('.event-form');
+  const userData = Object.fromEntries(new FormData(form));
+  const { title, description, date, startTime, endTime } = userData;
+
+  return {
+    title,
+    description,
+    dateFrom: new Date(`${date} ${startTime}`),
+    dateTo: new Date(`${date} ${endTime}`),
+  };
+};

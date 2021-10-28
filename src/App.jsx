@@ -1,14 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect , useState } from "react";
 import Header from "./components/header/Header.jsx";
 import Calendar from "./components/calendar/Calendar.jsx";
 import { getWeekStartDate, generateWeekRange } from "../src/utils/dateUtils.js";
 import Modal from './components/modal/Modal.jsx'
 import "./common.scss";
+import { fetchEvents,
+  createNewEvent,
+  deleteEvent,
+  createObjectForm, } from "./gateway/events.js";
 
 const App = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [weekStartDate, setWeekStartDate] = useState(new Date());
+    const [events, setEvents] = useState([]);
   const weekDates = generateWeekRange(getWeekStartDate(weekStartDate));
+  
+  const fetchEventsHandler = () => {
+    fetchEvents().then((data) => 
+      setEvents(data));
+  };
+  const deleteEventHandler = (id) => {
+      deleteEvent(id)
+      .then(() => fetchEventsHandler())
+      console.log(events)
+  };
+
+    useEffect(() => {
+      fetchEventsHandler();
+    }, []);
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      createNewEvent(createObjectForm()).then(() => fetchEventsHandler());
+      setModalOpen(!modalOpen);
+    };
 
   const createHandler = () =>{
     setModalOpen(true)
@@ -16,13 +40,12 @@ const App = () => {
   const closeHandler = () => {
     setModalOpen(false)
   };
-  
+   
 
   const prevWeekHandler = () => {
     setWeekStartDate(
       new Date(weekStartDate.setDate(weekStartDate.getDate() - 7))
     );
-    console.log(weekStartDate);
   };
 
   const nextWeekHandler = () => {
@@ -35,9 +58,16 @@ const App = () => {
   const resetWeek = () => {
     setWeekStartDate(new Date());
   };
+            console.log(events);
   return (
     <>
-      {modalOpen && <Modal closeHandler={closeHandler} />}
+      {modalOpen && (
+        <Modal
+          handleSubmit={handleSubmit}
+          events={events}
+          closeHandler={closeHandler}
+        />
+      )}
       <Header
         createHandler={createHandler}
         weekStartDate={weekStartDate}
@@ -45,7 +75,11 @@ const App = () => {
         prevWeekHandler={prevWeekHandler}
         nextWeekHandler={nextWeekHandler}
       />
-      <Calendar weekDates={weekDates} />
+      <Calendar
+        deleteEventHandler={deleteEventHandler}
+        events={events}
+        weekDates={weekDates}
+      />
     </>
   );
 };

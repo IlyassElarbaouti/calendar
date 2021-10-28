@@ -6,6 +6,8 @@
   border-radius: 8px;
   padding: 8px;
   color: #fff;
+  cursor: pointer;
+  
 
   &__title {
     width: 100%;
@@ -22,6 +24,14 @@
 }
 
 .delete-event-btn {
+  display: block;
+  position: absolute;
+  z-index: 10;
+  top: 50px;
+  right:40px;
   cursor: pointer;
   border: none;
+}
+.delete-event-btn_hide{
+  display: none;
 }
